@@ -1,0 +1,114 @@
+/* centra la tarjeta en el medio de la pantalla */
+.pagina {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+/* caja principal que contiene los dos paneles */
+.tarjeta {
+  display: flex;
+  width: 100%;
+  max-width: 1100px;
+  min-height: 680px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(90, 158, 201, 0.2);
+}
+
+/* panel izquierdo donde se muestra el logo y la información */
+.panel-izquierdo {
+  flex: 1;
+  min-width: 0;
+  background-color: var(--azul-panel);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 3rem;
+  gap: 1.2rem;
+}
+
+/* título principal del panel izquierdo */
+.panel-izquierdo h1 {
+  font-size: 2.4rem;
+  color: var(--azul-logo);
+}
+
+/* tamaño del logo */
+.logo {
+  width: 240px;
+  margin: 0 auto;
+}
+
+/* texto descriptivo debajo del logo */
+.descripcion {
+  max-width: 380px;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: var(--azul-logo);
+}
+
+/* frase corta debajo de la descripción */
+.eslogan {
+  max-width: 260px;
+  margin-top: 1rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--azul-logo);
+}
+
+/* panel derecho donde se muestran los formularios */
+.panel-derecho {
+  flex: 1.1;
+  min-width: 0;
+  background-color: var(--blanco);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 3.5rem 4.5rem;
+  gap: 2rem;
+}
+
+/* título del formulario activo */
+.panel-derecho h2 {
+  font-size: 1.9rem;
+  text-align: center;
+  color: var(--azul-logo);
+}
+
+/* contenedor de las pestañas */
+.pestanas {
+  display: flex;
+  border-bottom: 2px solid var(--borde);
+}
+
+/* estilo de cada pestaña */
+.pestana {
+  flex: 1;
+  margin-bottom: -2px;
+  padding: 0.7rem;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--gris-texto);
+  cursor: pointer;
+}
+
+/* resalta la pestaña seleccionada */
+.activa {
+  color: var(--azul-acento);
+  border-bottom-color: var(--azul-acento);
+}
+
+/* en celulares los dos paneles se apilan uno sobre otro */
+@media (max-width: 600px) {
+  .tarjeta {
+    flex-direction: column;
+  }
+}

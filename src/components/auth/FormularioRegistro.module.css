@@ -1,0 +1,46 @@
+/* organiza los campos del formulario en columna */
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+/* separa la etiqueta, el campo y su mensaje de error */
+.campo {
+  display: flex;
+  flex-direction: column;
+}
+
+/* mensaje de error debajo del campo */
+.error {
+  min-height: 0.85rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--error);
+}
+
+/* botón principal de APPET */
+.btn-appet {
+  padding: 0.8rem;
+  width: 100%;
+  background-color: var(--azul-acento);
+  border: none;
+  border-radius: 8px;
+  color: var(--blanco);
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-appet:hover {
+  background-color: var(--azul-hover);
+  color: var(--blanco);
+}
+
+/* mensaje que aparece cuando el formulario pasa la validación */
+.mensaje-exito {
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--azul-acento);
+}

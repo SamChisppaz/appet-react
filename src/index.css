@@ -1,0 +1,59 @@
+/* variables de color que se usan en todo el proyecto */
+:root {
+  --azul-fondo:  #edeff1;
+  --azul-panel:  #c4e9fc6b;
+  --azul-acento: #44a1db;
+  --azul-hover:  #4a8ab8;
+  --azul-texto:  #3a6a8a;
+  --azul-logo:   #0768c4;
+  --texto-input: #2d5a78;
+  --borde:       #c5d9ea;
+  --error:       #e07070;
+  --blanco:      #ffffff;
+  --gris-texto:  #6a8fa8;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* estilos generales de toda la página */
+body {
+  font-family: sans-serif;
+  background-color: var(--azul-fondo);
+  color: var(--azul-texto);
+  min-height: 100vh;
+}
+
+/* evita que las imagenes se salgan de su contenedor */
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* form-control y form-label son clases de Bootstrap, lo ajusto aquí
+   para que usen los colores de APPET en vez de los de Bootstrap por defecto */
+.form-control {
+  border: 1.5px solid var(--borde);
+  border-radius: 8px;
+  color: var(--texto-input);
+}
+
+.form-control:focus {
+  border-color: var(--azul-acento);
+  box-shadow: 0 0 0 3px rgba(91, 158, 201, 0.18);
+}
+
+.form-control::placeholder {
+  color: var(--gris-texto);
+  opacity: 0.75;
+}
+
+.form-label {
+  margin-bottom: 0.3rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--azul-texto);
+}
