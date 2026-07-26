@@ -1,0 +1,10 @@
+
+### Mascota con token
+POST http://localhost:8000/api/users/reset-password
+Content-Type: application/json
+
+{
+  "email": "twilight-k@mail.com",
+  "token": "2E2929",
+  "nuevaContrasena": "OtraClave789"
+}
