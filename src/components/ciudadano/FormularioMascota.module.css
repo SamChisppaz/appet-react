@@ -1,0 +1,63 @@
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+}
+
+.error {
+  min-height: 0.85rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--error);
+}
+
+/* fila para los botones de "Perro/Gato" y "Macho/Hembra" */
+.selectorBotones {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.boton, .botonActivo {
+  flex: 1;
+  padding: 0.6rem;
+  border-radius: 8px;
+  border: 2px solid var(--azul-acento);
+  background-color: var(--blanco);
+  color: var(--azul-acento);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.botonActivo {
+  background-color: var(--azul-acento);
+  color: var(--blanco);
+}
+
+.btn-appet {
+  padding: 0.8rem;
+  width: 100%;
+  background-color: var(--azul-acento);
+  border: none;
+  border-radius: 8px;
+  color: var(--blanco);
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-appet:hover {
+  background-color: var(--azul-hover);
+  color: var(--blanco);
+}
+
+.mensaje-exito {
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--azul-acento);
+}
