@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import Usuario from '../../models/Usuario.js';
-import Ciudadano from '../../models/Ciudadano.js';
 import styles from './FormularioRegistro.module.css';
 
 // formulario de registro que crea un ciudadano nuevo después de validar sus datos
-export default function FormularioRegistro() {
+// "alRegistroExitoso" viene desde Login.jsx, la llamamos cuando el backend
+// confirma que el registro funciono, para cambiar a la pestaña de Login
+export default function FormularioRegistro({ alRegistroExitoso }) {
   // lo que el usuario va escribiendo en cada campo
   const [nombre, setNombre] = useState('');
   const [apellido, setApellido] = useState('');
@@ -25,13 +26,12 @@ export default function FormularioRegistro() {
   const [mensajeExito, setMensajeExito] = useState('');
 
   // se ejecuta cuando el usuario le da clic a Crear cuenta
-  function manejarEnvio(evento) {
+  async function manejarEnvio(evento) {
     evento.preventDefault();
 
     let esValido = true;
     setMensajeExito('');
 
-    // los 4 campos de abajo solo necesitan no estar vacíos
     if (!nombre.trim()) {
       setErrorNombre('El nombre es obligatorio.');
       esValido = false;
@@ -47,10 +47,13 @@ export default function FormularioRegistro() {
     }
 
     if (!celular.trim()) {
-      setErrorCelular('El celular es obligatorio.');
-      esValido = false;
+    setErrorCelular('El celular es obligatorio.');
+    esValido = false;
+    } else if (celular.trim().length < 10) {
+    setErrorCelular('El celular debe tener mínimo 10 dígitos.');
+    esValido = false;
     } else {
-      setErrorCelular('');
+    setErrorCelular('');
     }
 
     if (!direccion.trim()) {
@@ -60,7 +63,6 @@ export default function FormularioRegistro() {
       setErrorDireccion('');
     }
 
-    // el correo y la contrasena si usan las validaciones de la clase Usuario
     if (!Usuario.validarFormatoCorreo(email)) {
       setErrorEmail('Ingresa un correo válido.');
       esValido = false;
@@ -76,11 +78,33 @@ export default function FormularioRegistro() {
     }
 
     if (esValido) {
-      // creamos el ciudadano de verdad con la clase, para probar que sí funciona
-      const nuevoCiudadano = new Ciudadano(nombre, apellido, celular, direccion, email, contrasena);
-      setMensajeExito(
-        `¡Bienvenido, ${nuevoCiudadano.nombreCompleto}! (falta conectar con el backend para guardar tu cuenta)`
-      );
+      // mandamos los datos al backend para que los guarde en la base de datos
+      try {
+        const respuesta = await fetch('http://localhost:8000/api/users/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ nombre, apellido, celular, direccion, email, contrasena }),
+        });
+
+        const datos = await respuesta.json();
+
+        if (respuesta.ok) {
+          setMensajeExito(datos.message || '¡Registro exitoso!');
+
+          // avisa  a Login.jsx que cambie a la pestaña de "Iniciar Sesión"
+          if (alRegistroExitoso) {
+            setTimeout(() => {
+              alRegistroExitoso();
+            }, 1500);
+          }
+        } else {
+          // el backend nos dice que salió mal 
+          setErrorEmail(datos.error || 'No se pudo completar el registro.');
+        }
+      } catch (error) {
+        // esto pasa si el servidor no está prendido o no hay internet
+        setErrorEmail('No se pudo conectar con el servidor. Intenta más tarde.');
+      }
     }
   }
 

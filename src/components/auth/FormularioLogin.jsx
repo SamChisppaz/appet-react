@@ -3,7 +3,9 @@ import Usuario from '../../models/Usuario.js';
 import styles from './FormularioLogin.module.css';
 
 // formulario de login valida el correo y la contraseña antes de continuar
-export default function FormularioLogin() {
+// alIniciarSesionExitoso viene desde Login.jsx: la llamamos cuando el
+// backend confirma que el login funciono, para cambiar de pantalla
+export default function FormularioLogin({ alOlvidarContrasena, alIniciarSesionExitoso }) {
   // lo que el usuario va escribiendo en cada campo
   const [email, setEmail] = useState('');
   const [contrasena, setContrasena] = useState('');
@@ -16,7 +18,7 @@ export default function FormularioLogin() {
   const [mensajeExito, setMensajeExito] = useState('');
 
   // se ejecuta cuando el usuario le da clic a Iniciar Sesión
-  function manejarEnvio(evento) {
+  async function manejarEnvio(evento) {
     evento.preventDefault(); // evita que la página se recargue
 
     let esValido = true;
@@ -38,14 +40,39 @@ export default function FormularioLogin() {
       setErrorContrasena('');
     }
 
-    // si todo pasó, por ahora solo lo confirmamos (todavía no hay backend)
+    // si todo pasó la validación, se pregunta al backend si las credenciales son correctas
     if (esValido) {
-      setMensajeExito('datos válidos (falta conectar con el backend para iniciar sesión de verdad)');
+      try {
+        const respuesta = await fetch('http://localhost:8000/api/users/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, contrasena }),
+        });
+
+        const datos = await respuesta.json();
+
+        if (respuesta.ok) {
+          // guardamos el token en el navegador persiste aunque se recargue la pagina
+          localStorage.setItem('token', datos.token);
+          setMensajeExito(`¡Bienvenido, ${datos.usuario.nombre}!`);
+
+          // despues se avisa a Login.jsx (que a su vez avisa a App.jsx) que  ya puede cambiar a la pantalla de registrar mascota
+          if (alIniciarSesionExitoso) {
+            setTimeout(() => {
+              alIniciarSesionExitoso();
+            }, 1000);
+          }
+        } else {
+          // el backend nos dice que salió mal 
+          setErrorContrasena(datos.error || 'No se pudo iniciar sesión.');
+        }
+      } catch (error) {
+        // esto pasa si el servidor no está prendido o no hay internet
+        setErrorContrasena('No se pudo conectar con el servidor. Intenta más tarde.');
+      }
     }
   }
 
-  // los campos correo y contrasena con su mensaje de error debajo, el botón, el link de recuperar contraseña, y el mensaje
-  // de exito que solo aparece si el formulario pasó la validación
   return (
     <form className={styles.formulario} onSubmit={manejarEnvio}>
 
@@ -75,7 +102,11 @@ export default function FormularioLogin() {
       </div>
 
       <button type="submit" className={styles['btn-appet']}>Iniciar Sesión</button>
-      <a href="#" className={styles['link-olvide']}>¿Olvidaste tu contraseña?</a>
+
+      {/*  un boton que llama a alOlvidarContrasena, que viene desde Login.jsx */}
+      <button type="button" className={styles['link-olvide']} onClick={alOlvidarContrasena}>
+        ¿Olvidaste tu contraseña?
+      </button>
 
       {mensajeExito && <p className={styles['mensaje-exito']}>{mensajeExito}</p>}
 

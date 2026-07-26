@@ -1,11 +1,19 @@
-/* organiza los campos del formulario en columna */
+/* texto explicativo arriba del formulario */
+.instrucciones {
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--azul-texto);
+  text-align: center;
+}
+
+/* organiza el campo del formulario en columna */
 .formulario {
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
 }
 
-/* separa la etiqueta, el campo y su mensaje de error */
 .campo {
   display: flex;
   flex-direction: column;
@@ -17,26 +25,6 @@
   font-size: 0.75rem;
   font-weight: 600;
   color: var(--error);
-}
-
-/* enlace para recuperar la contraseña (ahora es un boton, por eso lleva
-   background y border en none, para que se siga viendo como un link) */
-.link-olvide {
-  display: block;
-  width: 100%;
-  padding-top: 0.5rem;
-  background: none;
-  border: none;
-  text-align: center;
-  font-size: 0.95rem;
-  font-weight: 600;
-  text-decoration: none;
-  color: var(--azul-acento);
-  cursor: pointer;
-}
-
-.link-olvide:hover {
-  text-decoration: underline;
 }
 
 /* botón principal de APPET */
@@ -57,10 +45,26 @@
   color: var(--blanco);
 }
 
-/* mensaje que aparece cuando el formulario pasa la validación */
+/* mensaje que aparece cuando el correo pasa la validación */
 .mensaje-exito {
   text-align: center;
   font-size: 0.9rem;
   font-weight: 600;
   color: var(--azul-acento);
+}
+
+/* botón para volver, pero se ve como un link */
+.link-volver {
+  display: block;
+  margin: 1.2rem auto 0;
+  background: none;
+  border: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--azul-acento);
+  cursor: pointer;
+}
+
+.link-volver:hover {
+  text-decoration: underline;
 }
