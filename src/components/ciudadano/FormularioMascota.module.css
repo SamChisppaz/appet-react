@@ -1,3 +1,22 @@
+/* tarjeta blanca centrada que envuelve el formulario */
+.tarjeta {
+  max-width: 640px;
+  margin: 0 auto;
+  background-color: var(--blanco);
+  border-radius: 1rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  padding: 3rem;
+}
+
+/* título arriba del formulario (bootstrap: fw-bold mb-5 fs-4 text-center) */
+.titulo {
+  color: var(--azul-acento);
+  font-weight: 700;
+  font-size: 1.5rem;
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
 .formulario {
   display: flex;
   flex-direction: column;

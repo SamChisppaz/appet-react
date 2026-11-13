@@ -4,6 +4,7 @@ const Usuario = require("../models/User");
 const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const verificarToken = require("../middleware/verificarToken");
 
 // registrar un usuario nuevo
 router.post("/register", async (req, res) => {
@@ -148,6 +149,93 @@ router.post("/reset-password", async (req, res) => {
         console.error(error);
         res.status(500).json({
             error: "Error al actualizar la contraseña"
+        });
+    }
+});
+
+// actualizar los datos de un usuario va con verificarToken 
+router.put("/:id", verificarToken, async (req, res) => {
+    try {
+        // el id de la url debe ser el mismo que el del token, si no, alguien
+        // esta tratando de editar los datos de otro usuario
+        if (req.usuario.id !== req.params.id) {
+            return res.status(403).json({
+                error: "No tienes permiso para editar este usuario"
+            });
+        }
+
+        // solo se aceptan estos campos del body, asi nadie puede mandar
+        // por ejemplo "rol": "ADMINISTRADOR" y auto-asignarse permisos
+        const { celular, direccion, contrasenaActual, contrasena } = req.body;
+
+        const cambios = {};
+        if (celular !== undefined) cambios.celular = celular;
+        if (direccion !== undefined) cambios.direccion = direccion;
+
+        // si quiere cambiar la contraseña, primero se revisa que la
+        // contraseña actual que mando sea la correcta
+        if (contrasena) {
+            const usuarioActual = await Usuario.findById(req.params.id);
+
+            const coincide = await bcrypt.compare(contrasenaActual || "", usuarioActual.contrasena);
+            if (!coincide) {
+                return res.status(400).json({
+                    error: "La contraseña actual no es correcta"
+                });
+            }
+
+            cambios.contrasena = await bcrypt.hash(contrasena, 10);
+        }
+
+        const usuarioActualizado = await Usuario.findByIdAndUpdate(
+            req.params.id,
+            cambios,
+            { new: true } // con esto, la respuesta trae el usuario ya actualizado, no el de antes
+        );
+
+        if (!usuarioActualizado) {
+            return res.status(404).json({
+                error: "Usuario no encontrado"
+            });
+        }
+
+        res.status(200).json({
+            message: "Usuario actualizado correctamente",
+            usuario: usuarioActualizado
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            error: "Error al actualizar el usuario"
+        });
+    }
+});
+
+// eliminar un usuario tambien va con verificarToken
+router.delete("/:id", verificarToken, async (req, res) => {
+    try {
+        // mismo chequeo que en PUT: un usuario solo puede eliminar su propia cuenta
+        if (req.usuario.id !== req.params.id) {
+            return res.status(403).json({
+                error: "No tienes permiso para eliminar este usuario"
+            });
+        }
+
+        const usuarioEliminado = await Usuario.findByIdAndDelete(req.params.id);
+
+        if (!usuarioEliminado) {
+            return res.status(404).json({
+                error: "Usuario no encontrado"
+            });
+        }
+
+        res.status(200).json({
+            message: "Usuario eliminado correctamente"
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            error: "Error al eliminar el usuario"
         });
     }
 });

@@ -1,0 +1,11 @@
+/* acomoda el sidebar y el contenido uno junto al otro */
+.panel {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* espacio donde se muestra el contenido segun la vista que este activa */
+.contenido {
+  flex: 1;
+  padding: 3rem 3.5rem;
+}

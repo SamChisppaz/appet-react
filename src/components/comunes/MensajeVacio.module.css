@@ -1,0 +1,14 @@
+/* centra el aviso cuando una lista no tiene nada que mostrar */
+.contenedor {
+  display: flex;
+  justify-content: center;
+  padding: 2.5rem 1rem;
+}
+
+/* texto del aviso, en gris para que no se confunda con un mensaje de error */
+.texto {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--gris-texto);
+  text-align: center;
+}

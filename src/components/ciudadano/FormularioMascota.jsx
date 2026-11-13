@@ -46,7 +46,7 @@ export default function FormularioMascota() {
 
     if (!esValido) return;
 
-    // sacamos el token que guardamos en el navegador cuando el usuario inicio sesion
+    // saca el token que quedó guardado en el navegador cuando el usuario inició sesion
     const token = localStorage.getItem('token');
 
     if (!token) {
@@ -70,14 +70,14 @@ export default function FormularioMascota() {
 
       if (respuesta.ok) {
         setMensajeExito(datos.message);
-        // limpiamos el formulario para que quede listo por si quiere registrar otra
+        // limpia el formulario para que quede listo por si quiere registrar otra
         setNombre('');
         setRaza('');
         setEdad('');
         setEspecie('PERRO');
         setSexo('MACHO');
       } else {
-        // si el token vencio o no es valido, el backend contesta 401 y aqui lo mostramos
+        // si el token vencio o no es valido, el backend contesta 401 y aqui se muestra
         setErrorGeneral(datos.error || 'No se pudo registrar la mascota.');
       }
     } catch (error) {
@@ -86,7 +86,10 @@ export default function FormularioMascota() {
   }
 
   return (
-    <form className={styles.formulario} onSubmit={manejarEnvio}>
+    <div className={styles.tarjeta}>
+      <h1 className={styles.titulo}>Registrar mascota</h1>
+
+      <form className={styles.formulario} onSubmit={manejarEnvio}>
 
       <div className={styles.campo}>
         <label htmlFor="nombre-mascota" className="form-label">Nombre</label>
@@ -172,6 +175,7 @@ export default function FormularioMascota() {
       <span className={styles.error}>{errorGeneral}</span>
       {mensajeExito && <p className={styles['mensaje-exito']}>{mensajeExito}</p>}
 
-    </form>
+      </form>
+    </div>
   );
 }

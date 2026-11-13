@@ -1,0 +1,111 @@
+/* colores que solo usa el sidebar. Se declaran aqui con nombres distintos
+   a los de index.css a propósito, para no pisar las variables que ya se
+   usan en el resto del proyecto (mismo criterio que se usaba en la maquetación,
+   cada archivo agregaba sus propios colores extra) */
+:root {
+  --gris-suave: #f0f4f8;
+  --sidebar-borde: #e2ecf4;
+}
+
+/* columna fija a la izquierda con el usuario, el menu y el boton de cerrar sesion */
+.panel {
+  width: 255px;
+  min-height: 100vh;
+  background-color: var(--blanco);
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 1.2rem;
+  box-shadow: 2px 0 16px rgba(0, 0, 0, 0.07);
+}
+
+/* fila de arriba con el icono de usuario y el saludo */
+.usuario {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding-bottom: 1.2rem;
+}
+
+.avatar {
+  font-size: 1.3rem;
+  color: var(--azul-texto);
+}
+
+.saludo {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--azul-texto);
+}
+
+/* linea separadora entre el usuario y el menu */
+.divisor {
+  border: none;
+  border-top: 3px solid var(--sidebar-borde);
+  margin-bottom: 1.2rem;
+}
+
+/* contenedor de los botones del menu, uno debajo del otro */
+.navegacion {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  flex: 1;
+}
+
+/* estilo de cada boton del menu cuando no esta seleccionado */
+.boton {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  background: none;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--azul-texto);
+  cursor: pointer;
+}
+
+/* ancho fijo en los iconos para que los textos de cada opcion queden alineados entre si */
+.boton i {
+  width: 18px;
+  text-align: center;
+  font-size: 1rem;
+}
+
+.boton:hover {
+  background-color: var(--gris-suave);
+}
+
+/* resalta la opcion que esta abierta en este momento, se repite junto con  */
+/* :hover para que no cambie de color al pasar el mouse por encima estando seleccionada */
+.activo,
+.activo:hover {
+  background-color: var(--azul-acento);
+  color: var(--blanco);
+}
+
+/* boton de cerrar sesion, el margin-top: auto lo empuja hasta el fondo del panel */
+.cerrarSesion {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  width: 100%;
+  margin-top: auto;
+  padding: 1rem 1rem 1rem;
+  border: none;
+  border-top: 1px solid var(--sidebar-borde);
+  border-radius: 0;
+  background: none;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--error);
+  cursor: pointer;
+}
+
+.cerrarSesion:hover {
+  background-color: #fdecea;
+}

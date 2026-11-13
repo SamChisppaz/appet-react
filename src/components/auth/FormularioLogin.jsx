@@ -52,14 +52,17 @@ export default function FormularioLogin({ alOlvidarContrasena, alIniciarSesionEx
         const datos = await respuesta.json();
 
         if (respuesta.ok) {
-          // guardamos el token en el navegador persiste aunque se recargue la pagina
+          // alIniciarSesionExitoso llega hasta App.jsx a traves de Login.jsx,
+          // e incluye los datos del usuario para que App.jsx sepa quien inicio sesion
           localStorage.setItem('token', datos.token);
+          localStorage.setItem('usuario', JSON.stringify(datos.usuario));
           setMensajeExito(`¡Bienvenido, ${datos.usuario.nombre}!`);
 
           // despues se avisa a Login.jsx (que a su vez avisa a App.jsx) que  ya puede cambiar a la pantalla de registrar mascota
+          // le mandamos los datos del usuario para que App.jsx sepa quien inicio sesion
           if (alIniciarSesionExitoso) {
             setTimeout(() => {
-              alIniciarSesionExitoso();
+              alIniciarSesionExitoso(datos.usuario);
             }, 1000);
           }
         } else {

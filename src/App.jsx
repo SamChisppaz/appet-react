@@ -1,29 +1,75 @@
 import { useState } from 'react';
 import Login from './components/auth/Login.jsx';
+import Sidebar from './components/layout/Sidebar.jsx';
+import Dashboard from './components/ciudadano/Dashboard.jsx';
 import FormularioMascota from './components/ciudadano/FormularioMascota.jsx';
-import './App.css';
+import Perfil from './components/ciudadano/Perfil.jsx';
+import styles from './App.module.css';
 
-// controla que pantalla se ve ahora mismo
-// login: con sus pestañas de iniciar sesion y registrarse
-// mascota: la pantalla protegida, para donde se va apenas hay sesion iniciada
+// pantalla define si se ve el login o el panel interno (con sesion iniciada)
+// vista define, dentro del panel, que opcion del sidebar esta abierta
 function App() {
-  const [pantalla, setPantalla] = useState('login');
+  // si ya existe una sesion guardada de antes, recupera el usuario desde
+  // el navegador para no mostrar el login otra vez
+  const [usuario, setUsuario] = useState(() => {
+    const usuarioGuardado = localStorage.getItem('usuario');
+    return usuarioGuardado ? JSON.parse(usuarioGuardado) : null;
+  });
 
-  // esta funcion se la pasamos a login para que nos avise cuando el login o el registro salieron bien
-  function irARegistrarMascota() {
-    setPantalla('mascota');
+  const [pantalla, setPantalla] = useState(usuario ? 'panel' : 'login');
+  const [vista, setVista] = useState('inicio');
+
+  // guarda que servicio se eligio en el dashboard (vacunacion o esterilizacion),
+  // lo va a usar la pantalla de jornadas para saber cuales mostrar
+  const [servicioSeleccionado, setServicioSeleccionado] = useState(null);
+
+  // se ejecuta cuando el login es exitoso y cambia a la pantalla del panel
+  function iniciarSesion(usuarioLogueado) {
+    setUsuario(usuarioLogueado);
+    setPantalla('panel');
+    setVista('inicio');
   }
 
-  if (pantalla === 'mascota') {
-    return (
-      <main style={{ maxWidth: '420px', margin: '3rem auto', padding: '0 1rem' }}>
-        <h2>Registrar mascota</h2>
-        <FormularioMascota />
+  // elimina la sesion guardada en el navegador y regresa a la pantalla de login
+  function cerrarSesion() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('usuario');
+    setUsuario(null);
+    setPantalla('login');
+    setVista('inicio');
+  }
+
+  // se ejecuta al elegir un servicio en el dashboard, guarda cual fue y cambia a la vista de jornadas
+  function verJornadas(tipoServicio) {
+    setServicioSeleccionado(tipoServicio);
+    setVista('jornadas');
+  }
+
+  if (pantalla === 'login') {
+    return <Login alAutenticar={iniciarSesion} />;
+  }
+
+  return (
+    <div className={styles.panel}>
+      <Sidebar
+        usuario={usuario}
+        vistaActiva={vista}
+        cambiarVista={setVista}
+        alCerrarSesion={cerrarSesion}
+      />
+
+      <main className={styles.contenido}>
+        {vista === 'inicio' && <Dashboard usuario={usuario} alVerJornadas={verJornadas} />}
+        {vista === 'registrarMascota' && <FormularioMascota />}
+
+        {vista === 'perfil' && <Perfil usuario={usuario} />}
+
+        {/* estas pantallas se completan en los siguientes pasos del proyecto */}
+        {vista === 'jornadas' && <p>Próximamente: jornadas de {servicioSeleccionado}.</p>}
+        {vista === 'misMascotas' && <p>Próximamente: listado de mascotas.</p>}
       </main>
-    );
-  }
-
-  return <Login alAutenticar={irARegistrarMascota} />;
+    </div>
+  );
 }
 
 export default App;

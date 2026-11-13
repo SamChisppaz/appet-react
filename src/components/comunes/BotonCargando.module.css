@@ -1,0 +1,23 @@
+/* boton principal de los formularios */
+.btn-appet {
+  padding: 0.8rem;
+  width: 100%;
+  background-color: var(--azul-acento);
+  border: none;
+  border-radius: 8px;
+  color: var(--blanco);
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* se oscurece un poco al pasar el mouse, pero no cuando esta desactivado */
+.btn-appet:hover:not(:disabled) {
+  background-color: var(--azul-hover);
+}
+
+/* se ve asi mientras el boton esta desactivado, para que se note que no se puede volver a presionar */
+.btn-appet:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}

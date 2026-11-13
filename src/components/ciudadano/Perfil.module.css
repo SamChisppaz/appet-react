@@ -1,0 +1,72 @@
+/* tarjeta blanca centrada, igual que en la maquetación
+   (bootstrap: card-perfil border-0 shadow-sm rounded-4 mx-auto + card-body p-5) */
+.tarjeta {
+  max-width: 600px;
+  margin: 0 auto;
+  background-color: var(--blanco);
+  border-radius: 1rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  padding: 3rem;
+}
+
+/* título arriba del formulario (bootstrap: fw-bold mb-5 fs-4 text-center) */
+.titulo {
+  color: var(--azul-acento);
+  font-weight: 700;
+  font-size: 1.5rem;
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+}
+
+/* en la maquetación el color de las etiquetas de perfil es distinto al
+   azul-acento normal, aqui se deja el mismo tono para que se vea igual */
+.label {
+  color: #0067a7;
+}
+
+.error {
+  min-height: 0.85rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--error);
+}
+
+.btn-appet {
+  padding: 0.8rem;
+  width: 100%;
+  margin-top: 0.4rem;
+  background-color: var(--azul-acento);
+  border: none;
+  border-radius: 8px;
+  color: var(--blanco);
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-appet:hover {
+  background-color: var(--azul-hover);
+  color: var(--blanco);
+}
+
+.btn-appet:active {
+  transform: scale(0.98);
+}
+
+.mensaje-exito {
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--azul-acento);
+}

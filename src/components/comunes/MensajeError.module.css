@@ -1,0 +1,8 @@
+/* texto de error, se ve chico y en rojo debajo del campo que fallo */
+.error {
+  display: block;
+  min-height: 0.85rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--error);
+}
