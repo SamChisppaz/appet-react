@@ -4,19 +4,23 @@ import styles from './Sidebar.module.css';
 // iniciar sesion, vistaActiva dice cual opcion esta resaltada ahora mismo
 // y cambiarVista cambia de pantalla sin recargar la pagina
 export default function Sidebar({ usuario, vistaActiva, cambiarVista, alCerrarSesion }) {
-  // cada opcion del menu, junto con su icono de Font Awesome y la vista
-  // que le corresponde en App.jsx
-  const opciones = [
-    { id: 'inicio', etiqueta: 'Inicio', icono: 'fa-house' },
-    { id: 'perfil', etiqueta: 'Perfil', icono: 'fa-circle-user' },
-    { id: 'misMascotas', etiqueta: 'Mis mascotas', icono: 'fa-paw' },
-    { id: 'registrarMascota', etiqueta: 'Registrar mascota', icono: 'fa-plus' },
-  ];
+  const esAdministrador = usuario !== null && usuario.rol === 'ADMINISTRADOR';
+
+  // cada opcion del menu, con su icono de Font Awesome y la vista que le corresponde en App.jsx.
+  //  El administrador tiene un menu distinto
+  const opciones = esAdministrador
+    ? [{ id: 'solicitudes', etiqueta: 'Solicitudes', icono: 'fa-list-check' }]
+    : [
+        { id: 'inicio', etiqueta: 'Inicio', icono: 'fa-house' },
+        { id: 'perfil', etiqueta: 'Perfil', icono: 'fa-circle-user' },
+        { id: 'misMascotas', etiqueta: 'Mis mascotas', icono: 'fa-paw' },
+        { id: 'registrarMascota', etiqueta: 'Registrar mascota', icono: 'fa-plus' },
+      ];
 
   return (
     <aside className={styles.panel}>
       <div className={styles.usuario}>
-        <i className={`fa-solid fa-user ${styles.avatar}`}></i>
+        <i className={`fa-solid ${esAdministrador ? 'fa-user-shield' : 'fa-user'} ${styles.avatar}`}></i>
         <span className={styles.saludo}>{usuario ? `Hola, ${usuario.nombre}` : 'Bienvenido'}</span>
       </div>
 
