@@ -4,6 +4,7 @@ import Sidebar from './components/layout/Sidebar.jsx';
 import Dashboard from './components/ciudadano/Dashboard.jsx';
 import FormularioMascota from './components/ciudadano/FormularioMascota.jsx';
 import Perfil from './components/ciudadano/Perfil.jsx';
+import MisMascotas from './components/ciudadano/MisMascotas.jsx';
 import styles from './App.module.css';
 
 // pantalla define si se ve el login o el panel interno (con sesion iniciada)
@@ -22,6 +23,9 @@ function App() {
   // guarda que servicio se eligio en el dashboard (vacunacion o esterilizacion),
   // lo va a usar la pantalla de jornadas para saber cuales mostrar
   const [servicioSeleccionado, setServicioSeleccionado] = useState(null);
+
+  // guarda los datos de la mascota que se esta editando, el formulario los usa para llenar los campos
+  const [mascotaEditando, setMascotaEditando] = useState(null);
 
   // se ejecuta cuando el login es exitoso y cambia a la pantalla del panel
   function iniciarSesion(usuarioLogueado) {
@@ -45,6 +49,17 @@ function App() {
     setVista('jornadas');
   }
 
+  // se ejecuta al pulsar "Editar" en una tarjeta, guarda la mascota y abre el formulario de edicion
+  function editarMascota(mascota) {
+    setMascotaEditando(mascota);
+    setVista('editarMascota');
+  }
+
+  // se ejecuta al guardar o cancelar la edicion, regresa a la lista de mascotas
+  function terminarEdicion() {
+    setVista('misMascotas');
+  }
+
   if (pantalla === 'login') {
     return <Login alAutenticar={iniciarSesion} />;
   }
@@ -53,7 +68,7 @@ function App() {
     <div className={styles.panel}>
       <Sidebar
         usuario={usuario}
-        vistaActiva={vista}
+        vistaActiva={vista === 'editarMascota' ? 'misMascotas' : vista} // editar sigue resaltando "Mis mascotas"
         cambiarVista={setVista}
         alCerrarSesion={cerrarSesion}
       />
@@ -61,12 +76,15 @@ function App() {
       <main className={styles.contenido}>
         {vista === 'inicio' && <Dashboard usuario={usuario} alVerJornadas={verJornadas} />}
         {vista === 'registrarMascota' && <FormularioMascota />}
+        {vista === 'misMascotas' && <MisMascotas alEditar={editarMascota} />}
+        {vista === 'editarMascota' && (
+          <FormularioMascota mascota={mascotaEditando} alTerminarEdicion={terminarEdicion} />
+        )}
 
         {vista === 'perfil' && <Perfil usuario={usuario} />}
 
         {/* estas pantallas se completan en los siguientes pasos del proyecto */}
         {vista === 'jornadas' && <p>Próximamente: jornadas de {servicioSeleccionado}.</p>}
-        {vista === 'misMascotas' && <p>Próximamente: listado de mascotas.</p>}
       </main>
     </div>
   );
