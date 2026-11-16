@@ -1,0 +1,22 @@
+/* espacio debajo del titulo, antes de la tabla */
+.encabezado {
+  margin-bottom: 1.5rem;
+}
+
+.titulo {
+  color: var(--azul-acento);
+  font-weight: 700;
+  font-size: 2rem;
+  margin-bottom: 0.4rem;
+}
+
+.subtitulo {
+  color: var(--gris-texto);
+}
+
+/* encabezado de la tabla */
+.encabezadoTabla th {
+  background-color: #e8f4fb;
+  color: var(--azul-texto);
+  font-weight: 700;
+}
