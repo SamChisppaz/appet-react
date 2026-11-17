@@ -31,7 +31,7 @@ const usuarioSchema = new mongoose.Schema({
         default: "CIUDADANO"
     },
     // resetToken guarda el código temporal que se le envía al usuario,
-    // resetTokenExpira guarda hasta qué momento es válido ese código (24 h)
+    // resetTokenExpira guarda hasta qué momento es válido ese código (30 minutos)
     resetToken: {
         type: String,
         default: null // por defecto nadie tiene un codigo activo
