@@ -1,0 +1,38 @@
+/* título de la pantalla */
+.titulo {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--azul-acento);
+  margin-bottom: 2rem;
+}
+
+/* tarjeta de la jornada, lista de mascotas y mensajes, uno debajo del otro */
+.contenedor {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 420px;
+}
+
+/* tarjeta blanca con las casillas de las mascotas */
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  background-color: var(--blanco);
+  border-radius: 18px;
+  padding: 1.5rem;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.07);
+}
+
+.subtitulo {
+  font-weight: 700;
+  color: var(--azul-texto);
+  margin: 0;
+}
+
+/* mensaje cuando la solicitud se envió bien */
+.exito {
+  font-weight: 600;
+  color: var(--azul-acento);
+}
