@@ -2,12 +2,20 @@ import { useState } from 'react';
 import styles from './FormularioMascota.module.css';
 
 // formulario para que un ciudadano ya logueado registre una mascota
-export default function FormularioMascota() {
-  const [nombre, setNombre] = useState('');
-  const [especie, setEspecie] = useState('PERRO');
-  const [raza, setRaza] = useState('');
-  const [edad, setEdad] = useState('');
-  const [sexo, setSexo] = useState('MACHO');
+// también sirve para editar una mascota ya registrada
+// props (opcionales, solo se usan al editar):
+// mascota: datos de la mascota a editar
+// alTerminarEdicion: función que regresa a la lista de mascotas, al guardar o al cancelar
+export default function FormularioMascota({ mascota, alTerminarEdicion }) {
+  // true si el formulario se usa para editar, false si se usa para registrar
+  const editando = Boolean(mascota);
+
+  // al editar, los campos empiezan con los datos de la mascota; al registrar, empiezan vacíos
+  const [nombre, setNombre] = useState(editando ? mascota.nombre : '');
+  const [especie, setEspecie] = useState(editando ? mascota.especie : 'PERRO');
+  const [raza, setRaza] = useState(editando ? mascota.raza : '');
+  const [edad, setEdad] = useState(editando ? mascota.edad : '');
+  const [sexo, setSexo] = useState(editando ? mascota.sexo : 'MACHO');
 
   const [errorNombre, setErrorNombre] = useState('');
   const [errorRaza, setErrorRaza] = useState('');
@@ -51,13 +59,19 @@ export default function FormularioMascota() {
 
     if (!token) {
       // esto pasa si alguien intenta registrar una mascota sin haber iniciado sesion
-      setErrorGeneral('Debes iniciar sesión antes de registrar una mascota.');
+      setErrorGeneral('Debes iniciar sesión antes de guardar la mascota.');
       return;
     }
 
+    // al editar se usa PUT con el id de la mascota; al registrar se usa POST
+    const url = editando
+      ? `http://localhost:8000/api/mascotas/${mascota._id}`
+      : 'http://localhost:8000/api/mascotas/register';
+    const metodo = editando ? 'PUT' : 'POST';
+
     try {
-      const respuesta = await fetch('http://localhost:8000/api/mascotas/register', {
-        method: 'POST',
+      const respuesta = await fetch(url, {
+        method: metodo,
         headers: {
           'Content-Type': 'application/json',
           // esto es lo que le prueba al backend quien esta haciendo la peticion
@@ -69,6 +83,12 @@ export default function FormularioMascota() {
       const datos = await respuesta.json();
 
       if (respuesta.ok) {
+        // al editar, regresar a la lista de mascotas y terminar aquí
+        if (editando) {
+          alTerminarEdicion();
+          return;
+        }
+
         setMensajeExito(datos.message);
         // limpia el formulario para que quede listo por si quiere registrar otra
         setNombre('');
@@ -78,7 +98,7 @@ export default function FormularioMascota() {
         setSexo('MACHO');
       } else {
         // si el token vencio o no es valido, el backend contesta 401 y aqui se muestra
-        setErrorGeneral(datos.error || 'No se pudo registrar la mascota.');
+        setErrorGeneral(datos.error || 'No se pudo guardar la mascota.');
       }
     } catch (error) {
       setErrorGeneral('No se pudo conectar con el servidor. Intenta más tarde.');
@@ -87,7 +107,7 @@ export default function FormularioMascota() {
 
   return (
     <div className={styles.tarjeta}>
-      <h1 className={styles.titulo}>Registrar mascota</h1>
+      <h1 className={styles.titulo}>{editando ? 'Editar mascota' : 'Registrar mascota'}</h1>
 
       <form className={styles.formulario} onSubmit={manejarEnvio}>
 
@@ -170,7 +190,16 @@ export default function FormularioMascota() {
         </div>
       </div>
 
-      <button type="submit" className={styles['btn-appet']}>Registrar mascota</button>
+      <button type="submit" className={styles['btn-appet']}>
+        {editando ? 'Guardar cambios' : 'Registrar mascota'}
+      </button>
+
+      {/* botón cancelar: solo aparece al editar, regresa a la lista sin guardar */}
+      {editando && (
+        <button type="button" className="btn btn-outline-secondary" onClick={alTerminarEdicion}>
+          Cancelar
+        </button>
+      )}
 
       <span className={styles.error}>{errorGeneral}</span>
       {mensajeExito && <p className={styles['mensaje-exito']}>{mensajeExito}</p>}
