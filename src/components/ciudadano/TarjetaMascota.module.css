@@ -1,0 +1,116 @@
+/* colores propios de la tarjeta */
+:root {
+  --mascota-icono-fondo: #e8f0f7;
+  --mascota-icono-color: #a0bdd4;
+  --mascota-editar-fondo: #e8f4fb;
+  --mascota-editar-hover: #d0eaf7;
+  --mascota-eliminar-fondo: #fdecea;
+  --mascota-eliminar-hover: #fad4d4;
+}
+
+/* contenedor de toda la tarjeta; overflow hidden recorta el fondo del ícono con las esquinas redondeadas */
+.tarjeta {
+  background-color: var(--blanco);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.07);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/* al pasar el mouse, la tarjeta sube un poco */
+.tarjeta:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.11);
+}
+
+/* zona del ícono de huella; flex lo centra */
+.icono {
+  height: 180px;
+  background-color: var(--mascota-icono-fondo);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* tamaño y color de la huella */
+.icono i {
+  font-size: 3.5rem;
+  color: var(--mascota-icono-color);
+}
+
+/* zona de textos debajo del ícono */
+.info {
+  padding: 1.2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* nombre de la mascota */
+.nombre {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--azul-texto);
+}
+
+/* datos en 2 columnas: etiqueta a la izquierda y valor a la derecha */
+.datos {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.3rem 1rem;
+}
+
+/* texto gris de cada etiqueta (raza, edad...) */
+.etiqueta {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--gris-texto);
+}
+
+/* texto del dato */
+.valor {
+  font-size: 0.88rem;
+  color: var(--azul-texto);
+}
+
+/* fila con los dos botones, uno al lado del otro */
+.acciones {
+  display: flex;
+  gap: 0.7rem;
+}
+
+/* estilo común de los dos botones; flex: 1 los hace del mismo ancho */
+.botonEditar, .botonEliminar {
+  flex: 1;
+  padding: 0.55rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+/* botón editar: azul claro */
+.botonEditar {
+  background-color: var(--mascota-editar-fondo);
+  color: var(--azul-acento);
+}
+
+/* color un poco más oscuro al pasar el mouse */
+.botonEditar:hover {
+  background-color: var(--mascota-editar-hover);
+}
+
+/* botón eliminar: rojo claro */
+.botonEliminar {
+  background-color: var(--mascota-eliminar-fondo);
+  color: var(--error);
+}
+
+.botonEliminar:hover {
+  background-color: var(--mascota-eliminar-hover);
+}
