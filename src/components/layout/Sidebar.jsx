@@ -9,12 +9,16 @@ export default function Sidebar({ usuario, vistaActiva, cambiarVista, alCerrarSe
   // cada opcion del menu, con su icono de Font Awesome y la vista que le corresponde en App.jsx.
   //  El administrador tiene un menu distinto
   const opciones = esAdministrador
-    ? [{ id: 'solicitudes', etiqueta: 'Solicitudes', icono: 'fa-list-check' }]
+    ? [
+        { id: 'crearJornada', etiqueta: 'Crear jornada', icono: 'fa-calendar-plus' },
+        { id: 'solicitudes', etiqueta: 'Solicitudes', icono: 'fa-list-check' },
+      ]
     : [
         { id: 'inicio', etiqueta: 'Inicio', icono: 'fa-house' },
         { id: 'perfil', etiqueta: 'Perfil', icono: 'fa-circle-user' },
         { id: 'misMascotas', etiqueta: 'Mis mascotas', icono: 'fa-paw' },
         { id: 'registrarMascota', etiqueta: 'Registrar mascota', icono: 'fa-plus' },
+        { id: 'misSolicitudes', etiqueta: 'Mis solicitudes', icono: 'fa-clipboard-list' },
       ];
 
   return (
