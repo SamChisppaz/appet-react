@@ -24,7 +24,7 @@ export default function RecuperarContrasena({ alVolver }) {
   const [mensajeExito, setMensajeExito] = useState('');
   const [errorGeneral, setErrorGeneral] = useState('');
 
-  // se ejecuta cuando el usuario pulsa Enviar en el paso del correo
+  // se ejecuta cuando el usuario pulsa en Enviar en el paso del correo
   async function manejarEnvioCorreo(evento) {
     evento.preventDefault();
     setMensajeExito('');
@@ -130,7 +130,7 @@ export default function RecuperarContrasena({ alVolver }) {
 
         {tokenSimulado && (
           <p className={styles['mensaje-exito']}>
-            Modo de prueba: tu código es <strong>{tokenSimulado}</strong> (en producción llegaría por correo).
+            Modo de prueba: tu código es <strong>{tokenSimulado}</strong> (en producción llegaría por correo). El código vence en 30 minutos.
           </p>
         )}
 
