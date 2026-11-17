@@ -1,0 +1,45 @@
+/* tarjeta blanca centrada que envuelve el formulario */
+.tarjeta {
+  max-width: 640px;
+  margin: 0 auto;
+  background-color: var(--blanco);
+  border-radius: 1rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  padding: 3rem;
+}
+
+.titulo {
+  color: var(--azul-acento);
+  font-weight: 700;
+  font-size: 1.5rem;
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+}
+
+/* deja la hora de inicio y la de fin lado a lado */
+.filaHoras {
+  display: flex;
+  gap: 1rem;
+}
+
+.filaHoras .campo {
+  flex: 1;
+}
+
+.mensaje-exito {
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--azul-acento);
+}
