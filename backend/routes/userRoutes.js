@@ -82,10 +82,18 @@ router.post("/login", async (req, res) => {
     }
 });
 
-// Solicitar recuperacion de contrasena
+// pedir la recuperacion de contraseña: genera un codigo temporal y lo guarda en el usuario
+// el codigo vence a los 30 minutos
 router.post("/forgot-password", async (req, res) => {
     try {
         const { email } = req.body;
+
+        // sin correo no se puede buscar al usuario
+        if (!email) {
+            return res.status(400).json({
+                error: "Ingresa tu correo"
+            });
+        }
 
         const usuario = await Usuario.findOne({ email });
         if (!usuario) {
@@ -94,13 +102,20 @@ router.post("/forgot-password", async (req, res) => {
             });
         }
 
+        // codigo de 6 caracteres (letras y numeros) elegido al azar, en mayusculas
         const token = crypto.randomBytes(3).toString("hex").toUpperCase();
-        const expira = new Date(Date.now() + 24 * 60 * 60 * 1000);
 
+        // momento en que el codigo deja de servir: ahora + 30 minutos
+        // (30 minutos x 60 segundos x 1000 milisegundos)
+        const expira = new Date(Date.now() + 30 * 60 * 1000);
+
+        // el codigo y su vencimiento quedan guardados en el usuario
         usuario.resetToken = token;
         usuario.resetTokenExpira = expira;
         await usuario.save();
 
+        // no hay servidor de correo conectado, por eso el codigo viaja en la respuesta
+        // y la pantalla lo muestra (modo de demostracion)
         res.status(200).json({
             message: "Revisa tu correo",
             tokenSimulado: token
@@ -113,10 +128,25 @@ router.post("/forgot-password", async (req, res) => {
     }
 });
 
-// cambiar la contrasena usando el codigo
+// cambiar la contraseña usando el codigo recibido
 router.post("/reset-password", async (req, res) => {
     try {
         const { email, token, nuevaContrasena } = req.body;
+
+        // los tres datos son obligatorios
+        if (!email || !token || !nuevaContrasena) {
+            return res.status(400).json({
+                error: "Faltan datos para cambiar la contraseña"
+            });
+        }
+
+        // la nueva contraseña debe tener minimo 8 caracteres, una mayuscula y un numero
+        // (la misma regla del registro, validada tambien aqui por seguridad)
+        if (nuevaContrasena.length < 8 || !/[A-Z]/.test(nuevaContrasena) || !/[0-9]/.test(nuevaContrasena)) {
+            return res.status(400).json({
+                error: "La contraseña debe tener mínimo 8 caracteres, una mayúscula y un número"
+            });
+        }
 
         const usuario = await Usuario.findOne({ email });
         if (!usuario) {
@@ -125,19 +155,24 @@ router.post("/reset-password", async (req, res) => {
             });
         }
 
+        // el codigo escrito debe ser igual al que se guardo
         if (usuario.resetToken !== token) {
             return res.status(400).json({
                 error: "Código inválido"
             });
         }
 
+        // el codigo debe seguir vigente: si ya pasaron los 30 minutos, se rechaza
         if (usuario.resetTokenExpira < new Date()) {
             return res.status(400).json({
-                error: "Enlace expirado, solicite uno nuevo"
+                error: "El código expiró, solicita uno nuevo"
             });
         }
 
+        // guarda la nueva contraseña cifrada con bcrypt (nunca en texto plano)
         usuario.contrasena = await bcrypt.hash(nuevaContrasena, 10);
+
+        // el codigo se borra para que no se pueda usar una segunda vez
         usuario.resetToken = null;
         usuario.resetTokenExpira = null;
         await usuario.save();
