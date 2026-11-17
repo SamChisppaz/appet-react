@@ -5,6 +5,11 @@ import Dashboard from './components/ciudadano/Dashboard.jsx';
 import FormularioMascota from './components/ciudadano/FormularioMascota.jsx';
 import Perfil from './components/ciudadano/Perfil.jsx';
 import MisMascotas from './components/ciudadano/MisMascotas.jsx';
+import Jornadas from './components/ciudadano/Jornadas.jsx';
+import SolicitarParticipacion from './components/ciudadano/SolicitarParticipacion.jsx';
+import MisSolicitudes from './components/ciudadano/MisSolicitudes.jsx';
+import CrearJornada from './components/admin/CrearJornada.jsx';
+import VerSolicitudes from './components/admin/VerSolicitudes.jsx';
 import styles from './App.module.css';
 
 // pantalla define si se ve el login o el panel interno (con sesion iniciada)
@@ -18,20 +23,29 @@ function App() {
   });
 
   const [pantalla, setPantalla] = useState(usuario ? 'panel' : 'login');
-  const [vista, setVista] = useState('inicio');
+
+  // el administrador empieza en su propio menu y el ciudadano en el inicio
+  const [vista, setVista] = useState(
+    usuario && usuario.rol === 'ADMINISTRADOR' ? 'crearJornada' : 'inicio'
+  );
 
   // guarda que servicio se eligio en el dashboard (vacunacion o esterilizacion),
-  // lo va a usar la pantalla de jornadas para saber cuales mostrar
+  // lo usa la pantalla de jornadas para saber cuales mostrar
   const [servicioSeleccionado, setServicioSeleccionado] = useState(null);
+
+  // guarda la jornada elegida, la pantalla de solicitud la necesita para inscribir las mascotas
+  const [jornadaSeleccionada, setJornadaSeleccionada] = useState(null);
 
   // guarda los datos de la mascota que se esta editando, el formulario los usa para llenar los campos
   const [mascotaEditando, setMascotaEditando] = useState(null);
+
+  const esAdministrador = usuario !== null && usuario.rol === 'ADMINISTRADOR';
 
   // se ejecuta cuando el login es exitoso y cambia a la pantalla del panel
   function iniciarSesion(usuarioLogueado) {
     setUsuario(usuarioLogueado);
     setPantalla('panel');
-    setVista('inicio');
+    setVista(usuarioLogueado.rol === 'ADMINISTRADOR' ? 'crearJornada' : 'inicio');
   }
 
   // elimina la sesion guardada en el navegador y regresa a la pantalla de login
@@ -49,6 +63,12 @@ function App() {
     setVista('jornadas');
   }
 
+  // se ejecuta al pulsar "Solicitar" en una jornada, guarda la jornada y abre la pantalla de solicitud
+  function solicitarParticipacion(jornada) {
+    setJornadaSeleccionada(jornada);
+    setVista('solicitarParticipacion');
+  }
+
   // se ejecuta al pulsar "Editar" en una tarjeta, guarda la mascota y abre el formulario de edicion
   function editarMascota(mascota) {
     setMascotaEditando(mascota);
@@ -64,27 +84,42 @@ function App() {
     return <Login alAutenticar={iniciarSesion} />;
   }
 
+  // algunas vistas no estan en el menu, asi que resaltan la opcion a la que pertenecen
+  let vistaActiva = vista;
+  if (vista === 'editarMascota') vistaActiva = 'misMascotas';
+  if (vista === 'jornadas' || vista === 'solicitarParticipacion') vistaActiva = 'inicio';
+
   return (
     <div className={styles.panel}>
       <Sidebar
         usuario={usuario}
-        vistaActiva={vista === 'editarMascota' ? 'misMascotas' : vista} // editar sigue resaltando "Mis mascotas"
+        vistaActiva={vistaActiva}
         cambiarVista={setVista}
         alCerrarSesion={cerrarSesion}
       />
 
       <main className={styles.contenido}>
-        {vista === 'inicio' && <Dashboard usuario={usuario} alVerJornadas={verJornadas} />}
-        {vista === 'registrarMascota' && <FormularioMascota />}
-        {vista === 'misMascotas' && <MisMascotas alEditar={editarMascota} />}
-        {vista === 'editarMascota' && (
+        {/* pantallas del administrador, solo se muestran con el rol ADMINISTRADOR */}
+        {esAdministrador && vista === 'crearJornada' && <CrearJornada />}
+        {esAdministrador && vista === 'solicitudes' && <VerSolicitudes />}
+
+        {/* pantallas del ciudadano */}
+        {!esAdministrador && vista === 'inicio' && (
+          <Dashboard usuario={usuario} alVerJornadas={verJornadas} />
+        )}
+        {!esAdministrador && vista === 'perfil' && <Perfil usuario={usuario} />}
+        {!esAdministrador && vista === 'registrarMascota' && <FormularioMascota />}
+        {!esAdministrador && vista === 'misMascotas' && <MisMascotas alEditar={editarMascota} />}
+        {!esAdministrador && vista === 'editarMascota' && (
           <FormularioMascota mascota={mascotaEditando} alTerminarEdicion={terminarEdicion} />
         )}
-
-        {vista === 'perfil' && <Perfil usuario={usuario} />}
-
-        {/* estas pantallas se completan en los siguientes pasos del proyecto */}
-        {vista === 'jornadas' && <p>Próximamente: jornadas de {servicioSeleccionado}.</p>}
+        {!esAdministrador && vista === 'jornadas' && (
+          <Jornadas tipoServicio={servicioSeleccionado} alSolicitar={solicitarParticipacion} />
+        )}
+        {!esAdministrador && vista === 'solicitarParticipacion' && (
+          <SolicitarParticipacion jornada={jornadaSeleccionada} />
+        )}
+        {!esAdministrador && vista === 'misSolicitudes' && <MisSolicitudes />}
       </main>
     </div>
   );
