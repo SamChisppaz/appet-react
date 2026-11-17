@@ -1,0 +1,33 @@
+/* título de la pantalla */
+.titulo {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--azul-acento);
+  margin-bottom: 2rem;
+}
+
+/* cuadrícula de 2 columnas con las tarjetas */
+.cuadricula {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.8rem;
+  max-width: 860px;
+}
+
+/* textos de "cargando" y de error */
+.estado {
+  font-weight: 600;
+  color: var(--gris-texto);
+}
+
+.error {
+  font-weight: 600;
+  color: var(--error);
+}
+
+/* en pantallas de 768px o menos, las tarjetas pasan a 1 sola columna */
+@media (max-width: 768px) {
+  .cuadricula {
+    grid-template-columns: 1fr;
+  }
+}
