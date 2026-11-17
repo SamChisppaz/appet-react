@@ -1,8 +1,6 @@
 const mongoose = require("mongoose");
 
-// Jornada: dia de vacunacion o esterilizacion con lugar y horario definidos
-// version minima, con los datos que necesita la consulta de solicitudes
-// la creacion y edicion de jornadas se completa en su propia tarea
+// Jornada: dia de vacunacion o esterilizacion con ubicacion y horario definidos
 const jornadaSchema = new mongoose.Schema({
     // servicio que se presta en la jornada
     tipoServicio: {
@@ -18,21 +16,25 @@ const jornadaSchema = new mongoose.Schema({
     // ciudad donde se realiza
     ciudad: {
         type: String,
-        required: true
+        required: true,
+        trim: true // quita espacios al inicio y al final
     },
     // sitio especifico de la jornada dentro de la ciudad
-    lugar: {
+    ubicacion: {
         type: String,
-        required: true
+        required: true,
+        trim: true
     },
-    // horas de inicio y fin en texto con formato "HH:mm", por ejemplo "09:00"
+    // horas de inicio y fin en texto con formato "HH:mm" de 24 horas, por ejemplo "09:00"
     horaInicio: {
         type: String,
-        required: true
+        required: true,
+        match: /^([01]\d|2[0-3]):[0-5]\d$/
     },
     horaFin: {
         type: String,
-        required: true
+        required: true,
+        match: /^([01]\d|2[0-3]):[0-5]\d$/
     }
 });
 
