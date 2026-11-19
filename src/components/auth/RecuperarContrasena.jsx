@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Usuario from '../../models/Usuario.js';
 import styles from './RecuperarContrasena.module.css';
+import { API_URL } from '../../config.js';
 
 // pantalla de recuperar contraseña, va en dos pasos:
 // primero el usuario escribe su correo y pedimos el código al backend
@@ -37,7 +38,8 @@ export default function RecuperarContrasena({ alVolver }) {
     setErrorEmail('');
 
     try {
-      const respuesta = await fetch('http://localhost:8000/api/users/forgot-password', {
+      // API_URL cambia segun donde corra la app: localhost o Vercel
+      const respuesta = await fetch(`${API_URL}/api/users/forgot-password`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
@@ -91,7 +93,8 @@ export default function RecuperarContrasena({ alVolver }) {
     if (!esValido) return;
 
     try {
-      const respuesta = await fetch('http://localhost:8000/api/users/reset-password', {
+      // API_URL cambia segun donde corra la app: localhost o Vercel
+      const respuesta = await fetch(`${API_URL}/api/users/reset-password`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
