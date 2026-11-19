@@ -4,6 +4,7 @@ import BotonCargando from '../comunes/BotonCargando.jsx';
 import MensajeVacio from '../comunes/MensajeVacio.jsx';
 import MensajeError from '../comunes/MensajeError.jsx';
 import styles from './SolicitarParticipacion.module.css';
+import { API_URL } from '../../config.js';
 
 // pantalla para elegir con qué mascotas se participa en una jornada
 // jornada: la jornada elegida en la pantalla anterior
@@ -23,7 +24,8 @@ export default function SolicitarParticipacion({ jornada }) {
       const token = localStorage.getItem('token');
 
       try {
-        const respuesta = await fetch('http://localhost:8000/api/mascotas', {
+        // API_URL cambia segun donde corra la app: localhost o Vercel
+        const respuesta = await fetch(`${API_URL}/api/mascotas`, {
           headers: { 'Authorization': `Bearer ${token}` },
         });
 
@@ -64,7 +66,8 @@ export default function SolicitarParticipacion({ jornada }) {
     setEnviando(true);
 
     try {
-      const respuesta = await fetch('http://localhost:8000/api/solicitudes', {
+      // API_URL cambia segun donde corra la app: localhost o Vercel
+      const respuesta = await fetch(`${API_URL}/api/solicitudes`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
