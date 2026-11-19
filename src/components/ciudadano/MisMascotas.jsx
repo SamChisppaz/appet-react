@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import TarjetaMascota from './TarjetaMascota.jsx';
 import MensajeVacio from '../comunes/MensajeVacio.jsx';
 import styles from './MisMascotas.module.css';
+import { API_URL } from '../../config.js';
 
 // pantalla "mis mascotas": lista de las mascotas del ciudadano con sesión iniciada
 // prop recibida desde App.jsx:
@@ -22,7 +23,8 @@ export default function MisMascotas({ alEditar }) {
 
       try {
         // el token va en el header para que el backend sepa de qué ciudadano son las mascotas
-        const respuesta = await fetch('http://localhost:8000/api/mascotas', {
+        // API_URL cambia segun donde corra la app: localhost o Vercel
+        const respuesta = await fetch(`${API_URL}/api/mascotas`, {
           headers: { 'Authorization': `Bearer ${token}` },
         });
 
@@ -63,7 +65,8 @@ export default function MisMascotas({ alEditar }) {
 
     try {
       // el id de la mascota va al final de la dirección para indicar cuál borrar
-      const respuesta = await fetch(`http://localhost:8000/api/mascotas/${mascota._id}`, {
+      // API_URL cambia segun donde corra la app: localhost o Vercel
+      const respuesta = await fetch(`${API_URL}/api/mascotas/${mascota._id}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` },
       });
