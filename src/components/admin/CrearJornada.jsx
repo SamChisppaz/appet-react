@@ -2,6 +2,7 @@ import { useState } from 'react';
 import BotonCargando from '../comunes/BotonCargando.jsx';
 import MensajeError from '../comunes/MensajeError.jsx';
 import styles from './CrearJornada.module.css';
+import { API_URL } from '../../config.js';
 
 // valores con los que empieza el formulario (y con los que queda al guardar)
 const datosVacios = {
@@ -87,7 +88,8 @@ export default function CrearJornada() {
     setCargando(true);
 
     try {
-      const respuesta = await fetch('http://localhost:8000/api/jornadas', {
+      // API_URL cambia segun donde corra la app: localhost o Vercel
+      const respuesta = await fetch(`${API_URL}/api/jornadas`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
