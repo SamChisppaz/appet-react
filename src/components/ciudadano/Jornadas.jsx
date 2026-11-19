@@ -3,6 +3,7 @@ import TarjetaJornada from './TarjetaJornada.jsx';
 import MensajeVacio from '../comunes/MensajeVacio.jsx';
 import MensajeError from '../comunes/MensajeError.jsx';
 import styles from './Jornadas.module.css';
+import { API_URL } from '../../config.js';
 
 // pantalla de jornadas disponible: lista las jornadas del servicio elegido en el dashboard
 // tipoServicio: "VACUNACION" o "ESTERILIZACION"
@@ -20,7 +21,8 @@ export default function Jornadas({ tipoServicio, alSolicitar }) {
 
       try {
         // el servicio va en la dirección; el backend solo devuelve las jornadas disponibles
-        const respuesta = await fetch(`http://localhost:8000/api/jornadas?tipoServicio=${tipoServicio}`, {
+        // API_URL cambia segun donde corra la app: localhost o Vercel
+        const respuesta = await fetch(`${API_URL}/api/jornadas?tipoServicio=${tipoServicio}`, {
           headers: { 'Authorization': `Bearer ${token}` },
         });
 
