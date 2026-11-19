@@ -39,3 +39,6 @@ mongoose
 
 const puerto = 8000;
 app.listen(puerto, () => console.log("Escuchando en el puerto", puerto));
+
+// Vercel necesita que este archivo entregue la app para poder usarla
+module.exports = app;
