@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import MensajeVacio from '../comunes/MensajeVacio.jsx';
 import MensajeError from '../comunes/MensajeError.jsx';
 import styles from './VerSolicitudes.module.css';
+import { API_URL } from '../../config.js';
 
 // el backend guarda estos valores en mayusculas, aqui se pasan a texto legible
 const nombresServicio = {
@@ -55,7 +56,8 @@ export default function VerSolicitudes() {
       const token = localStorage.getItem('token');
 
       try {
-        const respuesta = await fetch('http://localhost:8000/api/solicitudes', {
+        // API_URL cambia segun donde corra la app: localhost o Vercel
+        const respuesta = await fetch(`${API_URL}/api/solicitudes`, {
           // el token identifica al usuario ante el backend
           headers: { 'Authorization': `Bearer ${token}` },
         });
@@ -86,7 +88,8 @@ export default function VerSolicitudes() {
     setProcesando(true);
 
     try {
-      const respuesta = await fetch(`http://localhost:8000/api/solicitudes/${id}/estado`, {
+      // API_URL cambia segun donde corra la app: localhost o Vercel
+      const respuesta = await fetch(`${API_URL}/api/solicitudes/${id}/estado`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
