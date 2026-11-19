@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Usuario from '../../models/Usuario.js';
 import styles from './Perfil.module.css';
+import { API_URL } from '../../config.js';
 
 // pantalla para actualizar el celular, la direccion y/o la contraseña del ciudadano 
 // "usuario" viene desde App.jsx, se necesita para saber el id del usuario que se va a actualizar
@@ -81,7 +82,8 @@ export default function Perfil({ usuario }) {
     const token = localStorage.getItem('token');
 
     try {
-      const respuesta = await fetch(`http://localhost:8000/api/users/${usuario.id}`, {
+      // API_URL cambia segun donde corra la app: localhost o Vercel
+      const respuesta = await fetch(`${API_URL}/api/users/${usuario.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
