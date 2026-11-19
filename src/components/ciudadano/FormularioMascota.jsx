@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import styles from './FormularioMascota.module.css';
+import { API_URL } from '../../config.js';
 
 // formulario para que un ciudadano ya logueado registre una mascota
 // también sirve para editar una mascota ya registrada
@@ -64,9 +65,10 @@ export default function FormularioMascota({ mascota, alTerminarEdicion }) {
     }
 
     // al editar se usa PUT con el id de la mascota; al registrar se usa POST
+    // API_URL cambia segun donde corra la app: localhost o Vercel
     const url = editando
-      ? `http://localhost:8000/api/mascotas/${mascota._id}`
-      : 'http://localhost:8000/api/mascotas/register';
+      ? `${API_URL}/api/mascotas/${mascota._id}`
+      : `${API_URL}/api/mascotas/register`;
     const metodo = editando ? 'PUT' : 'POST';
 
     try {
