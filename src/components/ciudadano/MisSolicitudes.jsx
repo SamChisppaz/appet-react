@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import MensajeVacio from '../comunes/MensajeVacio.jsx';
 import MensajeError from '../comunes/MensajeError.jsx';
 import styles from './MisSolicitudes.module.css';
+import { API_URL } from '../../config.js';
 
 // la base de datos guarda estos valores en mayúscula
 // estos objetos sirven para mostrarlos como "Vacunación" y "Pendiente"
@@ -28,7 +29,8 @@ export default function MisSolicitudes() {
 
       try {
         // el token va en el header para que el backend sepa de qué ciudadano son las solicitudes
-        const respuesta = await fetch('http://localhost:8000/api/solicitudes/mias', {
+        // API_URL cambia segun donde corra la app: localhost o Vercel
+        const respuesta = await fetch(`${API_URL}/api/solicitudes/mias`, {
           headers: { 'Authorization': `Bearer ${token}` },
         });
 
