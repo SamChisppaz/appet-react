@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Usuario from '../../models/Usuario.js';
 import styles from './FormularioLogin.module.css';
+import { API_URL } from '../../config.js';
 
 // formulario de login valida el correo y la contraseña antes de continuar
 // alIniciarSesionExitoso viene desde Login.jsx: la llamamos cuando el
@@ -43,7 +44,8 @@ export default function FormularioLogin({ alOlvidarContrasena, alIniciarSesionEx
     // si todo pasó la validación, se pregunta al backend si las credenciales son correctas
     if (esValido) {
       try {
-        const respuesta = await fetch('http://localhost:8000/api/users/login', {
+        // API_URL cambia segun donde corra la app: localhost o Vercel
+        const respuesta = await fetch(`${API_URL}/api/users/login`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, contrasena }),
