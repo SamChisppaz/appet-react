@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Usuario from '../../models/Usuario.js';
 import styles from './FormularioRegistro.module.css';
+import { API_URL } from '../../config.js';
 
 // formulario de registro que crea un ciudadano nuevo después de validar sus datos
 // "alRegistroExitoso" viene desde Login.jsx, la llamamos cuando el backend
@@ -80,7 +81,8 @@ export default function FormularioRegistro({ alRegistroExitoso }) {
     if (esValido) {
       // mandamos los datos al backend para que los guarde en la base de datos
       try {
-        const respuesta = await fetch('http://localhost:8000/api/users/register', {
+        // API_URL cambia segun donde corra la app: localhost o Vercel
+        const respuesta = await fetch(`${API_URL}/api/users/register`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ nombre, apellido, celular, direccion, email, contrasena }),
